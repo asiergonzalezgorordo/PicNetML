@@ -1,224 +1,269 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using NUnit.Framework;
 using PicNetML.Arff;
 using PicNetML.Arff.Builder;
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PicNetML.Tests.Arff.Builder
 {
-  // ReSharper disable UnusedMember.Local
-  // ReSharper disable UnusedAutoPropertyAccessor.Local
-  [TestFixture] public class AttributesBuilderTests
-  {    
-    private class NumericAtt { public double Att1 { get;set; } }    
-    [Test] public void numeric_attributes() {
-      var atts = Build<NumericAtt>();
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsNumeric);
-    }
+	// ReSharper disable UnusedMember.Local
+	// ReSharper disable UnusedAutoPropertyAccessor.Local
+	[TestFixture]
+	public class AttributesBuilderTests
+	{
+		private class NumericAtt { public double Att1 { get; set; } }
 
-    private class StringAtt { public string Att1 { get;set; } }    
-    [Test] public void string_attributes() {
-      var atts = Build<StringAtt>();
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsString);
-    }
+		[Test]
+		public void numeric_attributes()
+		{
+			List<PmlAttribute> atts = Build<NumericAtt>();
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsNumeric);
+		}
 
-    private class DateAtt { public DateTime Att1 { get;set; } }    
-    [Test] public void date_attributes() {
-      var atts = Build<DateAtt>();
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsDate);
-    }
+		private class StringAtt { public string Att1 { get; set; } }
 
-    private class NominalEnumAtt { public StringSplitOptions Att1 { get;set; } }
-    [Test] public void enum_nominal() {
-      var atts = Build<NominalEnumAtt>();
+		[Test]
+		public void string_attributes()
+		{
+			List<PmlAttribute> atts = Build<StringAtt>();
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsString);
+		}
 
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(2, atts[0].NumValues);
-      Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
-      Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
-    }
+		private class DateAtt { public DateTime Att1 { get; set; } }
 
-    private class NominalSpecifiedAtt { [Nominal("a,b,c")] public string Att1 { get;set; } }
-    [Test] public void nominal_with_specified_values() {
-      var atts = Build<NominalSpecifiedAtt>();
+		[Test]
+		public void date_attributes()
+		{
+			List<PmlAttribute> atts = Build<DateAtt>();
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsDate);
+		}
 
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(3, atts[0].NumValues);
-      Assert.AreEqual(0, atts[0].IndexOfValue("a"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("b"));
-      Assert.AreEqual(2, atts[0].IndexOfValue("c"));
-    }
-    
-    private class NominalString { [Nominal] public string Att1 { get;set; } }
-    [Test] public void nominal_with_inferred_values() {
-      var atts = Build(new [] { new NominalString { Att1 = "a" }, new NominalString { Att1 = "z" }});
+		private class NominalEnumAtt { public StringSplitOptions Att1 { get; set; } }
 
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(2, atts[0].NumValues);
-      Assert.AreEqual(0, atts[0].IndexOfValue("a"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("z"));
-    }
+		[Test]
+		public void enum_nominal()
+		{
+			List<PmlAttribute> atts = Build<NominalEnumAtt>();
 
-    private class WithIgnoreAtt { public string Att1 { get;set; } [IgnoreFeature] public string Att2 { get;set; } }
-    [Test] public void with_ignore_attribute() {
-      var atts = Build<WithIgnoreAtt>();
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(2, atts[0].NumValues);
+			Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
+			Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
+		}
 
-      Assert.AreEqual(1, atts.Count);      
-      Assert.IsTrue(atts[0].IsString);
-    }
+		private class NominalSpecifiedAtt {[Nominal("a,b,c")] public string Att1 { get; set; } }
 
-    private class WithBinarizeAtt { [Binarize] public StringSplitOptions Att1 { get;set; }}
-    [Test] public void with_binarize_attribute() {
-      var atts = Build<WithBinarizeAtt>();
-      Assert.AreEqual(3, atts.Count);      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
-      Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
+		[Test]
+		public void nominal_with_specified_values()
+		{
+			List<PmlAttribute> atts = Build<NominalSpecifiedAtt>();
 
-      Assert.IsTrue(atts[1].IsNominal);
-      Assert.AreEqual(0, atts[1].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(3, atts[0].NumValues);
+			Assert.AreEqual(0, atts[0].IndexOfValue("a"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("b"));
+			Assert.AreEqual(2, atts[0].IndexOfValue("c"));
+		}
 
-      Assert.IsTrue(atts[2].IsNominal);
-      Assert.AreEqual(0, atts[2].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[2].IndexOfValue("1"));
-    }
+		private class NominalString {[Nominal] public string Att1 { get; set; } }
 
-    private class WithBinarizeAndIgnoreAtt { [Binarize, IgnoreFeature] public StringSplitOptions Att1 { get;set; }}
-    [Test] public void with_binarize_and_ignore_attributes() {
-      var atts = Build<WithBinarizeAndIgnoreAtt>();
-      Assert.AreEqual(2, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("1"));
+		[Test]
+		public void nominal_with_inferred_values()
+		{
+			List<PmlAttribute> atts = Build(new[] { new NominalString { Att1 = "a" }, new NominalString { Att1 = "z" } });
 
-      Assert.IsTrue(atts[1].IsNominal);
-      Assert.AreEqual(0, atts[1].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[1].IndexOfValue("1"));
-    }
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(2, atts[0].NumValues);
+			Assert.AreEqual(0, atts[0].IndexOfValue("a"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("z"));
+		}
 
-    private class WithAppendHasAtt { [AppendHasClassifier(1, "a,b")] public string Att1 { get;set; }}
-    [Test] public void with_append_has_att() {
-      var atts = Build<WithAppendHasAtt>();
-      Assert.AreEqual(2, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue("a"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("b"));
+		private class WithIgnoreAtt { public string Att1 { get; set; }[IgnoreFeature] public string Att2 { get; set; } }
 
-      Assert.IsTrue(atts[1].IsNominal);
-      Assert.AreEqual(0, atts[1].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[1].IndexOfValue("1"));
-    }
+		[Test]
+		public void with_ignore_attribute()
+		{
+			List<PmlAttribute> atts = Build<WithIgnoreAtt>();
 
-    private class WithAppendHasAndIgnoreAtt { [IgnoreFeature, AppendHasClassifier(1, "a,b")] public string Att1 { get;set; }}
-    [Test] public void with_append_has_and_ignore_atts() {
-      var atts = Build<WithAppendHasAndIgnoreAtt>();
-      Assert.AreEqual(1, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("1"));
-    }
+			Assert.AreEqual(1, atts.Count);
+			Assert.IsTrue(atts[0].IsString);
+		}
 
-    private class ExtendableInner { public StringSplitOptions Att1 { get;set; }}
-    [Test] public void externdable_with_no_additionals() {
-      var atts = Build(new [] { ExtendableObj.Create(new ExtendableInner()) });
+		private class WithBinarizeAtt {[Binarize] public StringSplitOptions Att1 { get; set; } }
 
-      Assert.AreEqual(1, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
-      Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
-    }
+		[Test]
+		public void with_binarize_attribute()
+		{
+			List<PmlAttribute> atts = Build<WithBinarizeAtt>();
+			Assert.AreEqual(3, atts.Count);
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
+			Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
 
-    [Test] public void externdable_with_some_extended() {
-      var o = ExtendableObj.Create(new ExtendableInner()).
-        AddBinary("nom1", true).
-        AddDate("date1", DateTime.Now).
-        AddNominal("nom2", "a").
-        AddNumerical("num1", 1).
-        AddString("str1", "val");
-      var atts = Build(new [] { o });
+			Assert.IsTrue(atts[1].IsNominal);
+			Assert.AreEqual(0, atts[1].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[1].IndexOfValue("1"));
 
-      // NOTE: The order below is actually fixed, that 
-      // is: binary, date, nom, num, str.
-      Assert.AreEqual(6, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
-      Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
+			Assert.IsTrue(atts[2].IsNominal);
+			Assert.AreEqual(0, atts[2].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[2].IndexOfValue("1"));
+		}
 
-      Assert.IsTrue(atts[1].IsNominal);
-      Assert.AreEqual(0, atts[1].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+		private class WithBinarizeAndIgnoreAtt {[Binarize, IgnoreFeature] public StringSplitOptions Att1 { get; set; } }
 
-      Assert.IsTrue(atts[2].IsDate);            
+		[Test]
+		public void with_binarize_and_ignore_attributes()
+		{
+			List<PmlAttribute> atts = Build<WithBinarizeAndIgnoreAtt>();
+			Assert.AreEqual(2, atts.Count);
 
-      Assert.IsTrue(atts[3].IsNominal);
-      Assert.AreEqual(0, atts[3].IndexOfValue("a"));
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("1"));
 
-      Assert.IsTrue(atts[4].IsNumeric);
+			Assert.IsTrue(atts[1].IsNominal);
+			Assert.AreEqual(0, atts[1].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+		}
 
-      Assert.IsTrue(atts[5].IsString);      
-    }
+		private class WithAppendHasAtt {[AppendHasClassifier(1, "a,b")] public string Att1 { get; set; } }
 
-    [Test] public void extendable_with_append_has_att() {
-       var o = ExtendableObj.Create(new WithAppendHasAtt()).
-        AddBinary("nom1", true).
-        AddDate("date1", DateTime.Now).
-        AddNominal("nom2", "a").
-        AddNumerical("num1", 1).
-        AddString("str1", "val");
-      var atts = Build(new [] { o });
-      Assert.AreEqual(7, atts.Count);      
-      
-      Assert.IsTrue(atts[0].IsNominal);
-      Assert.AreEqual(0, atts[0].IndexOfValue("a"));
-      Assert.AreEqual(1, atts[0].IndexOfValue("b"));     
+		[Test]
+		public void with_append_has_att()
+		{
+			List<PmlAttribute> atts = Build<WithAppendHasAtt>();
+			Assert.AreEqual(2, atts.Count);
 
-      // Extendables:
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue("a"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("b"));
 
-      Assert.IsTrue(atts[1].IsNominal);
-      Assert.AreEqual(0, atts[1].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+			Assert.IsTrue(atts[1].IsNominal);
+			Assert.AreEqual(0, atts[1].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+		}
 
-      Assert.IsTrue(atts[2].IsDate);            
+		private class WithAppendHasAndIgnoreAtt {[IgnoreFeature, AppendHasClassifier(1, "a,b")] public string Att1 { get; set; } }
 
-      Assert.IsTrue(atts[3].IsNominal);
-      Assert.AreEqual(0, atts[3].IndexOfValue("a"));
+		[Test]
+		public void with_append_has_and_ignore_atts()
+		{
+			List<PmlAttribute> atts = Build<WithAppendHasAndIgnoreAtt>();
+			Assert.AreEqual(1, atts.Count);
 
-      Assert.IsTrue(atts[4].IsNumeric);
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("1"));
+		}
 
-      Assert.IsTrue(atts[5].IsString);  
+		private class ExtendableInner { public StringSplitOptions Att1 { get; set; } }
 
-      // Has Att
-      Assert.IsTrue(atts[6].IsNominal);
-      Assert.AreEqual(0, atts[6].IndexOfValue("0"));
-      Assert.AreEqual(1, atts[6].IndexOfValue("1"));
-    }
+		[Test]
+		public void externdable_with_no_additionals()
+		{
+			List<PmlAttribute> atts = Build(new[] { ExtendableObj.Create(new ExtendableInner()) });
 
-    private class FlattenClass { [Flatten(5)] public int[] Att1 { private get;set; }}
-    [Test, Ignore("Not Implemented")] public void flatten_attribute() {
-      var rows = new [] {
-        new FlattenClass { Att1 = new [] {1,2,3,4,5}},
-        new FlattenClass { Att1 = new [] {6,7,8,9,10}}
-      };
-      var atts = Build(rows);
-      Assert.AreEqual(5, atts.Count);
-      Assert.IsTrue(atts.All(a => a.IsNumeric));
-    }
+			Assert.AreEqual(1, atts.Count);
 
-    private List<PmlAttribute> Build<T>(T[] rows = null) where T : new() { 
-      return new AttributesBuilder<T>(rows ?? new [] { new T() }).BuildAttributes(); 
-    }
-  }
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
+			Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
+		}
+
+		[Test]
+		public void externdable_with_some_extended()
+		{
+			ExtendableObj<ExtendableInner> o = ExtendableObj.Create(new ExtendableInner()).
+				AddBinary("nom1", true).
+				AddDate("date1", DateTime.Now).
+				AddNominal("nom2", "a").
+				AddNumerical("num1", 1).
+				AddString("str1", "val");
+			List<PmlAttribute> atts = Build(new[] { o });
+
+			// NOTE: The order below is actually fixed, that
+			// is: binary, date, nom, num, str.
+			Assert.AreEqual(6, atts.Count);
+
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue(StringSplitOptions.None.ToString()));
+			Assert.AreEqual(1, atts[0].IndexOfValue(StringSplitOptions.RemoveEmptyEntries.ToString()));
+
+			Assert.IsTrue(atts[1].IsNominal);
+			Assert.AreEqual(0, atts[1].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+
+			Assert.IsTrue(atts[2].IsDate);
+
+			Assert.IsTrue(atts[3].IsNominal);
+			Assert.AreEqual(0, atts[3].IndexOfValue("a"));
+
+			Assert.IsTrue(atts[4].IsNumeric);
+
+			Assert.IsTrue(atts[5].IsString);
+		}
+
+		[Test]
+		public void extendable_with_append_has_att()
+		{
+			ExtendableObj<WithAppendHasAtt> o = ExtendableObj.Create(new WithAppendHasAtt()).
+				AddBinary("nom1", true).
+				AddDate("date1", DateTime.Now).
+				AddNominal("nom2", "a").
+				AddNumerical("num1", 1).
+				AddString("str1", "val");
+			List<PmlAttribute> atts = Build(new[] { o });
+			Assert.AreEqual(7, atts.Count);
+
+			Assert.IsTrue(atts[0].IsNominal);
+			Assert.AreEqual(0, atts[0].IndexOfValue("a"));
+			Assert.AreEqual(1, atts[0].IndexOfValue("b"));
+
+			// Extendables:
+
+			Assert.IsTrue(atts[1].IsNominal);
+			Assert.AreEqual(0, atts[1].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[1].IndexOfValue("1"));
+
+			Assert.IsTrue(atts[2].IsDate);
+
+			Assert.IsTrue(atts[3].IsNominal);
+			Assert.AreEqual(0, atts[3].IndexOfValue("a"));
+
+			Assert.IsTrue(atts[4].IsNumeric);
+
+			Assert.IsTrue(atts[5].IsString);
+
+			// Has Att
+			Assert.IsTrue(atts[6].IsNominal);
+			Assert.AreEqual(0, atts[6].IndexOfValue("0"));
+			Assert.AreEqual(1, atts[6].IndexOfValue("1"));
+		}
+
+		private class FlattenClass {[Flatten(5)] public int[] Att1 { private get; set; } }
+
+		[Test, Ignore("Not Implemented")]
+		public void flatten_attribute()
+		{
+			FlattenClass[] rows = new[] {
+				new FlattenClass { Att1 = new [] {1,2,3,4,5}},
+				new FlattenClass { Att1 = new [] {6,7,8,9,10}}
+			};
+			List<PmlAttribute> atts = Build(rows);
+			Assert.AreEqual(5, atts.Count);
+			Assert.IsTrue(atts.All(a => a.IsNumeric));
+		}
+
+		private List<PmlAttribute> Build<T>(T[] rows = null) where T : new()
+		{
+			return new AttributesBuilder<T>(rows ?? new[] { new T() }).BuildAttributes();
+		}
+	}
 }

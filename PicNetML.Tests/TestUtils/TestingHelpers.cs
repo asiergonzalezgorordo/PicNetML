@@ -6,10 +6,9 @@ namespace PicNetML.Tests.TestUtils
 {
 	public static class TestingHelpers
 	{
-
 		public static string GetResourceFileName(string filename)
 		{
-			var dir = TestContext.CurrentContext.TestDirectory;
+			string dir = TestContext.CurrentContext.TestDirectory;
 			return $@"{dir}\..\..\resources\{filename}";
 		}
 
