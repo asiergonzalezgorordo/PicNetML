@@ -31,8 +31,8 @@ namespace PicNetML.Tasks.WekaUpdater
 			}
 		}
 
-		[Test]
-		//[Test, Ignore("Run Manually")]
+		//[Test]
+		[Test, Ignore("Run Manually")]
 		public void UpdateWekaLibs()
 		{
 			Console.WriteLine("Downloading the latest dev weka.zip");
