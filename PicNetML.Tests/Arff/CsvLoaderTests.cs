@@ -15,6 +15,12 @@ namespace PicNetML.Tests.Arff
 			Directory.GetFiles(".", ".csv").ForEach2(File.Delete);
 		}
 
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void Test_loading_file_without_a_preprocessor()
 		{

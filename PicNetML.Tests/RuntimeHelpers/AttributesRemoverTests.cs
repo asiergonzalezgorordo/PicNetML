@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using PicNetML.RuntimeHelpers;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests.RuntimeHelpers
@@ -8,6 +9,12 @@ namespace PicNetML.Tests.RuntimeHelpers
 	[TestFixture]
 	public class AttributesRemoverTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_removing_attributes_by_index()
 		{

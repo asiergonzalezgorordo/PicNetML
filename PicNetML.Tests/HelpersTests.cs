@@ -9,6 +9,12 @@ namespace PicNetML.Tests
 	[TestFixture]
 	public class HelpersTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[SetUp, TearDown]
 		public void RemoveWorkingFiles()
 		{

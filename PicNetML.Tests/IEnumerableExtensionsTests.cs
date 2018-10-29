@@ -1,6 +1,7 @@
 ﻿using java.util;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests
@@ -8,6 +9,12 @@ namespace PicNetML.Tests
 	[TestFixture]
 	public class IEnumerableExtensionsTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_GetMajority()
 		{

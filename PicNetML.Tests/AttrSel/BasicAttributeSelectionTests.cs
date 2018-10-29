@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using PicNetML.AttrSel.Algs;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests.AttrSel
@@ -8,6 +9,12 @@ namespace PicNetML.Tests.AttrSel
 	[TestFixture]
 	public class BasicAttributeSelectionTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void simple_attribute_selection_tests_with_indexes()
 		{

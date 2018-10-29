@@ -1,11 +1,18 @@
 ﻿using NUnit.Framework;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 
 namespace PicNetML.Tests.Clstr
 {
 	[TestFixture]
 	public class BasicClustererTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_basic_clustering()
 		{

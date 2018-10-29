@@ -1,15 +1,15 @@
-﻿using NUnit.Framework;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests.TestUtils
 {
 	public static class TestingHelpers
 	{
+		#region Public Methods
+
 		public static string GetResourceFileName(string filename)
 		{
-			string dir = TestContext.CurrentContext.TestDirectory;
-			return $@"{dir}\..\..\resources\{filename}";
+			return @"..\..\resources\" + filename;
 		}
 
 		public static Runtime LoadSmallRuntime<T>(string filename, int classidx, int count) where T : new()
@@ -25,5 +25,7 @@ namespace PicNetML.Tests.TestUtils
 				return Runtime.LoadFromRows(classidx, rows);
 			}
 		}
+
+		#endregion Public Methods
 	}
 }

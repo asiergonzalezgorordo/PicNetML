@@ -1,11 +1,18 @@
 ﻿using NUnit.Framework;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 
 namespace PicNetML.Tests
 {
 	[TestFixture]
 	public class AttributeExtensionsTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_attribute_to_enumerable_gives_all_distinct_nominal_vals()
 		{

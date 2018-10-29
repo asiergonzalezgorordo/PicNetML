@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using PicNetML.Clss;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests.Clss
@@ -8,6 +9,12 @@ namespace PicNetML.Tests.Clss
 	[TestFixture]
 	public class BasicClassifierTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_simple_evaluation()
 		{

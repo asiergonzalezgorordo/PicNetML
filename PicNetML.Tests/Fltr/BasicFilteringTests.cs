@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using PicNetML.Tests.TestUtils;
+using System.IO;
 using System.Linq;
 
 namespace PicNetML.Tests.Fltr
@@ -7,6 +8,12 @@ namespace PicNetML.Tests.Fltr
 	[TestFixture]
 	public class BasicFilteringTests
 	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTests()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void test_basic_unsupervised_instance_filtering()
 		{
